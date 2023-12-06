@@ -1,82 +1,87 @@
 //___________________
 //Dependencies
 //___________________
-const express = require('express')
-const mongoose = require('mongoose')
-const app = express()
-const db = mongoose.connection
-require('dotenv').config()
-const cors = require('cors')
+const express = require("express");
+const mongoose = require("mongoose");
+const app = express();
+const db = mongoose.connection;
+require("dotenv").config();
+const cors = require("cors");
 
-app.use(express.json())
-app.use(cors())
+app.use(express.json());
+app.use(cors());
 
 //___________________
 //Port
 
-const Posts = require('./models/post')
+const Posts = require("./models/post");
 //___________________
 // Allow use of Heroku's port or your own local port, depending on the environment
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
 
 //___________________
 //Database
 //___________________
 // How to connect to the database either via heroku or locally
-const MONGODB_URI = process.env.MONGODB_URI
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Connect to Mongo &
 // Fix Depreciation Warnings from Mongoose
 // May or may not need these depending on your Mongoose version
 mongoose.connect(MONGODB_URI, () => {
-  console.log('connected')
-})
+  console.log("connected");
+});
 
 // Error / success
-db.on('error', (err) => console.log(err.message + ' is Mongod not running?'))
-db.on('connected', () => console.log('mongo connected: ', MONGODB_URI))
-db.on('disconnected', () => console.log('mongo disconnected'))
+db.on("error", (err) => console.log(err.message + " is Mongod not running?"));
+db.on("connected", () => console.log("mongo connected: ", MONGODB_URI));
+db.on("disconnected", () => console.log("mongo disconnected"));
 
 //___________________
 //Middleware
 //___________________
 
 //use public folder for static assets
-app.use(express.static('public'))
+app.use(express.static("public"));
 
-app.use(express.json()) // returns middleware that only parses JSON - may or may not need it depending on your project
+app.use(express.json()); // returns middleware that only parses JSON - may or may not need it depending on your project
 
 //___________________
 // Routes
 
-app.post('/', (req, res) => {
+app.post("/CityBook", (req, res) => {
   Posts.create(req.body, (err, CreatedPost) => {
-    res.json(CreatedPost)
-  })
-})
+    res.json(CreatedPost);
+  });
+});
 
-app.get('/', (req, res) => {
+app.get("/CityBook", (req, res) => {
   Posts.find({}, (err, foundPost) => {
-    res.json(foundPost)
-  })
-})
+    res.json(foundPost);
+  });
+});
 
-app.delete('/:id', (req, res) => {
+app.delete("/CityBook/:id", (req, res) => {
   Posts.findByIdAndRemove(req.params.id, (err, deletedPost) => {
-    res.json(deletedPost)
-  })
-})
+    res.json(deletedPost);
+  });
+});
 
-app.put('/:id', (req, res) => {
-  Posts.findByIdAndUpdate(req.params.id, req.body, { new: true }, (error, updatedPost) => {
-    res.json(updatedPost)
-  })
-})
+app.put("/CityBook/:id", (req, res) => {
+  Posts.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true },
+    (error, updatedPost) => {
+      res.json(updatedPost);
+    }
+  );
+});
 
 //___________________
 //localhost:3000
 
 //___________________
-//Listener
+//Listener debugging
 //___________________
-app.listen(PORT, () => console.log('Listening on port:', PORT))
+app.listen(4000, () => console.log("Listening on port:", PORT));
