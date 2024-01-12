@@ -4,7 +4,7 @@
 CityBook Backend API is a Node.js and Express application interfacing with MongoDB. It's designed to handle CRUD operations for a city-based social application.
 
 ## Features
-- CRUD operations for posts...
+- CRUD operations for posts..
   
 - Express server setup.
 - MongoDB database integration with Mongoose.
